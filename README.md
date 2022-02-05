@@ -2,7 +2,7 @@
 An application that is built along with a machine learning model trained on the UCI  Portuguese "Vinho Verde"  white wine dataset.
 This dataset is publicly available at [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv) for research purposes. 
 
-Data Reference:
+Dataset Reference:
 
 P. Cortez, A. Cerdeira, F. Almeida, T. Matos and J. Reis. Modeling wine preferences by data mining from physicochemical properties. In Decision Support Systems, Elsevier, 47(4):547-553. ISSN: 0167-9236.
 
