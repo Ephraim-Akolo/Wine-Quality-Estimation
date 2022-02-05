@@ -18,19 +18,19 @@ __Note:__ several of the attributes may be correlated, thus it makes sense to ap
 __Attribute information:__ For more information, read [Cortez et al., 2009].
 
 __Input variables (based on physicochemical tests):___
-   1 - fixed acidity
-   2 - volatile acidity
-   3 - citric acid
-   4 - residual sugar
-   5 - chlorides
-   6 - free sulfur dioxide
-   7 - total sulfur dioxide
-   8 - density
-   9 - pH
-   10 - sulphates
-   11 - alcohol
-   Output variable (based on sensory data): 
-   12 - quality (score between 0 and 10)
+1. fixed acidity
+2. volatile acidity
+3. citric acid
+4. residual sugar
+5. chlorides
+6. free sulfur dioxide
+7. total sulfur dioxide
+8. density
+9. pH
+10. sulphates
+11. alcohol
+Output variable (based on sensory data): 
+12. quality (score between 0 and 10)
 
 Missing Attribute Values: None
 
