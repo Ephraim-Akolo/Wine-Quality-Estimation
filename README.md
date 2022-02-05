@@ -41,7 +41,9 @@ Missing Attribute Values: None
 The application is in two (2) parts:
 ### The Model/Algorithm/Estimator development and training
 This is where the machine learning model or algorithm is trained to be able to tell poor and high grade wine with a quality of 0-10 (0 being very poor wine and 10 being a high grade wine).
-The training language is python.
+
+The model/algorithm is trained in python.
 ### The Application development
 This is a software housing the model, with a user interface to enable easy interaction with the model.
-The development language is python.
+
+The application is developed in python.
