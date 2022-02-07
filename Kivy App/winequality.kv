@@ -1,0 +1,195 @@
+#:set transparent_blue (65/255, 105/255, 225/255, .2)
+#:set blue (65/255, 105/255, 225/255, 1)
+#:set grey (.2, .2, .2, .8)
+
+Manager:
+    Screen:
+        name: "screen1"
+        BoxLayout:
+            orientation:'horizontal'
+            canvas.before:
+                Color:
+                    rgba: transparent_blue
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            BoxLayout:
+                orientation:'vertical'
+                size_hint: 1, None
+                pos_hint: {"center_y": .5}
+                spacing: '10dp'
+                MDRaisedButton:
+                    markup: True
+                    text: '[b]  Statical Model  [/b]'
+                    text_color: (1, 1, 1, .95)
+                    md_bg_color: blue
+                    pos_hint: {"center_x": .5,}   
+                    on_release:
+                        root.load_SM()
+                        root.transition.direction = "left"
+                        root.current = "screen2"                 
+                MDRectangleFlatButton:
+                    markup: True
+                    text: '[b]Neural Network[/b]'
+                    theme_text_color: "Custom"
+                    text_color: grey
+                    line_color: blue
+                    pos_hint: {"center_x": .5}
+                    on_release:
+                        root.load_NN()
+                        root.transition.direction = "left"
+                        root.current = "screen2"
+        FloatLayout:
+            Label:
+                markup: True
+                text:'[b]Wine Quality Estimator [/b]' if root.width > 400 else '[b]Wine Quality\n   Estimator [/b]'
+                size_hint: None, None
+                color: grey
+                font_size: "30dp" 
+                pos_hint: {"top": .9, "center_x": .5}
+
+    
+    Screen:
+        name: "screen2"
+        BoxLayout:
+            orientation:'vertical'
+            RelativeLayout:
+                size_hint_y: .1
+                canvas.before:
+                    Color:
+                        rgba: transparent_blue
+                    Rectangle:
+                        size: self.size
+                MDIconButton:
+                    icon: "arrow-left-bold"
+                    pos_hint: {'center_y': .5}
+                    theme_text_color: "Custom"
+                    text_color: blue
+                    on_release: 
+                        root.transition.direction = "right"
+                        root.current = "screen1"
+                
+                Label:
+                    markup: True
+                    text:'[b]Wine Features[/b]'
+                    pos_hint: {"center_x": .5 if root.width > 500 else .4}
+                    color: grey
+                    font_size: "20dp"
+                MDRaisedButton:
+                    markup: True
+                    text: 'From CSV'
+                    text_color: (1, 1, 1, .95)
+                    md_bg_color: blue
+                    pos_hint: {"right": .97, "center_y": .5}   
+                    on_release:
+                        #root.load_SM()
+                        root.transition.direction = "left"
+                        #root.current = "screen2"
+            ScrollView:
+                do_scroll_y: False if root.width > 500 else True
+                BoxLayout:
+                    orientation:'vertical'
+                    size_hint_y: None
+                    height: "{}".format((53+10)*12-10) if root.width < 500 else self.parent.height-10
+                    GridLayout:
+                        cols: 2 if root.width > 500 else 1
+                        spacing: '20dp' if root.width < 700 else "100dp" if root.width < 1000 else "200dp", "10dp"
+                        padding: ('20dp', '10dp', '20dp', '0dp') if root.width < 700 else ('100dp', '10dp', '100dp', '0dp') if root.width < 1000 else ('200dp', '10dp', '200dp', '0dp')
+                        MDTextField:
+                            id: text1
+                            hint_text: "color_mode = 'custom'"
+                            color_mode: 'custom'
+                            helper_text_mode: "on_focus"
+                            helper_text: "Color is defined by 'line_color_focus' property"
+                            line_color_focus: blue
+                            on_text_validate: text2.focus=True
+                            focus: True
+                        MDTextField:
+                            id: text2
+                            hint_text: "color_mode = 'custom'"
+                            color_mode: 'custom'
+                            helper_text_mode: "on_focus"
+                            helper_text: "Color is defined by 'line_color_focus' property"
+                            line_color_focus: blue
+                            on_text_validate: text3.focus=True
+                        MDTextField:
+                            id: text3
+                            hint_text: "color_mode = 'custom'"
+                            color_mode: 'custom'
+                            helper_text_mode: "on_focus"
+                            helper_text: "Color is defined by 'line_color_focus' property"
+                            line_color_focus: blue
+                            on_text_validate: text4.focus=True
+                        MDTextField:
+                            id: text4
+                            hint_text: "color_mode = 'custom'"
+                            color_mode: 'custom'
+                            helper_text_mode: "on_focus"
+                            helper_text: "Color is defined by 'line_color_focus' property"
+                            line_color_focus: blue
+                            on_text_validate: text5.focus=True
+                        MDTextField:
+                            id: text5
+                            hint_text: "color_mode = 'custom'"
+                            color_mode: 'custom'
+                            helper_text_mode: "on_focus"
+                            helper_text: "Color is defined by 'line_color_focus' property"
+                            line_color_focus: blue
+                            on_text_validate: text6.focus=True
+                        MDTextField:
+                            id: text6
+                            hint_text: "color_mode = 'custom'"
+                            color_mode: 'custom'
+                            helper_text_mode: "on_focus"
+                            helper_text: "Color is defined by 'line_color_focus' property"
+                            line_color_focus: blue
+                            on_text_validate: text7.focus=True
+                        MDTextField:
+                            id: text7
+                            hint_text: "color_mode = 'custom'"
+                            color_mode: 'custom'
+                            helper_text_mode: "on_focus"
+                            helper_text: "Color is defined by 'line_color_focus' property"
+                            line_color_focus: blue
+                            on_text_validate: text8.focus=True
+                        MDTextField:
+                            id: text8
+                            hint_text: "color_mode = 'custom'"
+                            color_mode: 'custom'
+                            helper_text_mode: "on_focus"
+                            helper_text: "Color is defined by 'line_color_focus' property"
+                            line_color_focus: blue
+                            on_text_validate: text9.focus=True
+                        MDTextField:
+                            id: text9
+                            hint_text: "color_mode = 'custom'"
+                            color_mode: 'custom'
+                            helper_text_mode: "on_focus"
+                            helper_text: "Color is defined by 'line_color_focus' property"
+                            line_color_focus: blue
+                            on_text_validate: text10.focus=True
+                        MDTextField:
+                            id: text10
+                            hint_text: "color_mode = 'custom'"
+                            color_mode: 'custom'
+                            helper_text_mode: "on_focus"
+                            helper_text: "Color is defined by 'line_color_focus' property"
+                            line_color_focus: blue
+                            on_text_validate: text11.focus=True
+                        MDTextField:
+                            id: text11
+                            hint_text: "color_mode = 'custom'"
+                            color_mode: 'custom'
+                            helper_text_mode: "on_focus"
+                            helper_text: "Color is defined by 'line_color_focus' property"
+                            line_color_focus: blue
+                    MDRaisedButton:
+                        markup: True
+                        text: '[b]  Predict/estimate quality  [/b]'
+                        text_color: (1, 1, 1, .95)
+                        md_bg_color: blue
+                        pos_hint: {"center_x": .5,}   
+                        on_release:
+                            #root.load_SM()
+                            root.transition.direction = "left"
+                            #root.current = "screen2"

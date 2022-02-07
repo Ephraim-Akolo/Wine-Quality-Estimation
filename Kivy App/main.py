@@ -1,11 +1,28 @@
 from tkinter import Label
 from kivymd.app import MDApp
 from kivymd.uix.label import MDLabel
+from kivy.uix.screenmanager import ScreenManager
+
+
+class Manager(ScreenManager):
+    '''
+    Apps root widget class
+    '''
+    def load_NN(self):
+        '''
+        load the trained neural nework model.
+        '''
+    
+    def load_SM(self):
+        '''
+        load the statistical based model.
+        '''
 
 
 class WineQualityApp(MDApp):
-    def build(self):
-        return MDLabel(text="Hello World!", halign="center")
+    '''
+    Apps window instance class.
+    '''
 
 
 WineQualityApp().run()
