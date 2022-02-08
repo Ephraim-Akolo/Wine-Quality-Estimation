@@ -1,4 +1,3 @@
-from tkinter import Label
 from kivymd.app import MDApp
 from kivymd.uix.label import MDLabel
 from kivy.uix.screenmanager import ScreenManager
