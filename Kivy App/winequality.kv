@@ -1,6 +1,33 @@
 #:set transparent_blue (65/255, 105/255, 225/255, .2)
+#:set background_blue (213/255, 221/255, 245/255, 1)
 #:set blue (65/255, 105/255, 225/255, 1)
 #:set grey (.2, .2, .2, .8)
+
+#:import Factory kivy.factory.Factory
+#:import about_features about_features
+<MyPopup@Popup>:
+    BoxLayout:
+        orientation:'vertical'
+        ScrollView:
+            MDList:
+                BoxLayout:
+                    orientation:'vertical'
+                    size_hint_y: None
+                    height: '3700dp'
+                    MDLabel:
+                        size_hint_x: None
+                        width: '250dp'
+                        markup: True
+                        text: about_features.about
+                        theme_text_color: "Custom"
+                        text_color: "white"
+                        pos_hint: {"center_x": .5}
+        Button:
+            text: 'Close me!'
+            on_release: root.dismiss()
+            size_hint: None, None
+            size: "200dp", "50dp"
+            pos_hint: {"center_x": .5}
 
 Manager:
     Screen:
@@ -13,6 +40,8 @@ Manager:
                 Rectangle:
                     pos: self.pos
                     size: self.size
+                Line:
+                    rounded_rectangle: (dp(self.width//2 -100), dp(self.height//2 -110), 200, 200, 15)
             BoxLayout:
                 orientation:'vertical'
                 size_hint: 1, None
@@ -20,14 +49,15 @@ Manager:
                 spacing: '10dp'
                 MDRaisedButton:
                     markup: True
-                    text: '[b]  Statical Model  [/b]'
+                    text: '[b] Statical Model  [/b]'
                     text_color: (1, 1, 1, .95)
                     md_bg_color: blue
                     pos_hint: {"center_x": .5,}   
                     on_release:
                         root.load_SM()
                         root.transition.direction = "left"
-                        root.current = "screen2"                 
+                        root.current = "screen2"
+                        finput.focus = True                 
                 MDRectangleFlatButton:
                     markup: True
                     text: '[b]Neural Network[/b]'
@@ -39,6 +69,21 @@ Manager:
                         root.load_NN()
                         root.transition.direction = "left"
                         root.current = "screen2"
+                        finput.focus = True
+        Label:
+            size_hint: None, None
+            height: "50dp"
+            width: "110dp"
+            canvas.before:
+                Color:
+                    rgba: background_blue
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            text:'load a model'
+            pos: dp(self.parent.width//2 - self.width/2), dp(self.parent.height//2 +64)
+            color: grey
+
         FloatLayout:
             Label:
                 markup: True
@@ -75,121 +120,99 @@ Manager:
                     pos_hint: {"center_x": .5 if root.width > 500 else .4}
                     color: grey
                     font_size: "20dp"
-                MDRaisedButton:
-                    markup: True
-                    text: 'From CSV'
-                    text_color: (1, 1, 1, .95)
-                    md_bg_color: blue
+                MDTextButton:
+                    theme_text_color: "Custom"
+                    text_color: blue
+                    text: 'Features?'
                     pos_hint: {"right": .97, "center_y": .5}   
-                    on_release:
-                        #root.load_SM()
-                        root.transition.direction = "left"
-                        #root.current = "screen2"
-            ScrollView:
-                do_scroll_y: False if root.width > 500 else True
-                BoxLayout:
-                    orientation:'vertical'
+                    on_release: Factory.MyPopup().open()
+                        
+            BoxLayout:
+                orientation:'vertical'
+                MDLabel:
+                    id: label
+                    markup: True
+                    text:"Input wine's [color=#4169e1]{}[/color]".format(root._wine_features[root._current_feature])
+                    halign: "center"
                     size_hint_y: None
-                    height: "{}".format((53+10)*12-10) if root.width < 500 else self.parent.height-10
-                    GridLayout:
-                        cols: 2 if root.width > 500 else 1
-                        spacing: '20dp' if root.width < 700 else "100dp" if root.width < 1000 else "200dp", "10dp"
-                        padding: ('20dp', '10dp', '20dp', '0dp') if root.width < 700 else ('100dp', '10dp', '100dp', '0dp') if root.width < 1000 else ('200dp', '10dp', '200dp', '0dp')
-                        MDTextField:
-                            id: text1
-                            hint_text: "color_mode = 'custom'"
-                            color_mode: 'custom'
-                            helper_text_mode: "on_focus"
-                            helper_text: "Color is defined by 'line_color_focus' property"
+                RelativeLayout:
+                    size_hint_x: None
+                    width: "300dp"
+                    pos_hint: {"center_x": .5}
+                    BoxLayout:
+                        orientation:'horizontal'
+                        spacing: '20dp'
+                        size_hint_y: None
+                        height: finput.height
+                        pos_hint: {"center_y": .7}
+                        MDRaisedButton:
+                            markup: True
+                            text: 'previous'
+                            text_color: (1, 1, 1, .95)
+                            md_bg_color: blue
+                            pos_hint: {"center_y": .45}
+                            on_release:
+                                root._prev_feature(label, finput)
+                        FeaturesInput:
+                            id: finput
+                            hint_text: "11 left"
+                            helper_text: "required"
+                            helper_text_mode: "on_error"
+                            required: False
+                            theme_text_color: "Custom"
+                            color_mode: "custom"
                             line_color_focus: blue
-                            on_text_validate: text2.focus=True
-                            focus: True
-                        MDTextField:
-                            id: text2
-                            hint_text: "color_mode = 'custom'"
-                            color_mode: 'custom'
-                            helper_text_mode: "on_focus"
-                            helper_text: "Color is defined by 'line_color_focus' property"
-                            line_color_focus: blue
-                            on_text_validate: text3.focus=True
-                        MDTextField:
-                            id: text3
-                            hint_text: "color_mode = 'custom'"
-                            color_mode: 'custom'
-                            helper_text_mode: "on_focus"
-                            helper_text: "Color is defined by 'line_color_focus' property"
-                            line_color_focus: blue
-                            on_text_validate: text4.focus=True
-                        MDTextField:
-                            id: text4
-                            hint_text: "color_mode = 'custom'"
-                            color_mode: 'custom'
-                            helper_text_mode: "on_focus"
-                            helper_text: "Color is defined by 'line_color_focus' property"
-                            line_color_focus: blue
-                            on_text_validate: text5.focus=True
-                        MDTextField:
-                            id: text5
-                            hint_text: "color_mode = 'custom'"
-                            color_mode: 'custom'
-                            helper_text_mode: "on_focus"
-                            helper_text: "Color is defined by 'line_color_focus' property"
-                            line_color_focus: blue
-                            on_text_validate: text6.focus=True
-                        MDTextField:
-                            id: text6
-                            hint_text: "color_mode = 'custom'"
-                            color_mode: 'custom'
-                            helper_text_mode: "on_focus"
-                            helper_text: "Color is defined by 'line_color_focus' property"
-                            line_color_focus: blue
-                            on_text_validate: text7.focus=True
-                        MDTextField:
-                            id: text7
-                            hint_text: "color_mode = 'custom'"
-                            color_mode: 'custom'
-                            helper_text_mode: "on_focus"
-                            helper_text: "Color is defined by 'line_color_focus' property"
-                            line_color_focus: blue
-                            on_text_validate: text8.focus=True
-                        MDTextField:
-                            id: text8
-                            hint_text: "color_mode = 'custom'"
-                            color_mode: 'custom'
-                            helper_text_mode: "on_focus"
-                            helper_text: "Color is defined by 'line_color_focus' property"
-                            line_color_focus: blue
-                            on_text_validate: text9.focus=True
-                        MDTextField:
-                            id: text9
-                            hint_text: "color_mode = 'custom'"
-                            color_mode: 'custom'
-                            helper_text_mode: "on_focus"
-                            helper_text: "Color is defined by 'line_color_focus' property"
-                            line_color_focus: blue
-                            on_text_validate: text10.focus=True
-                        MDTextField:
-                            id: text10
-                            hint_text: "color_mode = 'custom'"
-                            color_mode: 'custom'
-                            helper_text_mode: "on_focus"
-                            helper_text: "Color is defined by 'line_color_focus' property"
-                            line_color_focus: blue
-                            on_text_validate: text11.focus=True
-                        MDTextField:
-                            id: text11
-                            hint_text: "color_mode = 'custom'"
-                            color_mode: 'custom'
-                            helper_text_mode: "on_focus"
-                            helper_text: "Color is defined by 'line_color_focus' property"
-                            line_color_focus: blue
+                            input_filter: "int"
+                        MDRaisedButton:
+                            markup: True
+                            text: 'next'
+                            text_color: (1, 1, 1, .95)
+                            md_bg_color: blue
+                            pos_hint: {"center_y": .45}
+                            on_press:
+                                finput.required = True if finput.text == "" else False
+                                finput.focus = True
+                            on_release:
+                                root._next_feature(label, finput)
                     MDRaisedButton:
                         markup: True
-                        text: '[b]  Predict/estimate quality  [/b]'
+                        text: 'or load all features from csv'
                         text_color: (1, 1, 1, .95)
                         md_bg_color: blue
-                        pos_hint: {"center_x": .5,}   
+                        pos_hint: {"center_y": .2, "center_x": .5}
                         on_release:
-                            #root.load_SM()
-                            root.transition.direction = "left"
-                            #root.current = "screen2"
+                            root._file_chooser()
+
+    Screen:
+        name: "screen3" 
+        BoxLayout:
+            orientation:'vertical'
+            RelativeLayout:
+                size_hint_y: .1
+                canvas.before:
+                    Color:
+                        rgba: transparent_blue
+                    Rectangle:
+                        size: self.size
+                MDIconButton:
+                    icon: "arrow-left-bold"
+                    pos_hint: {'center_y': .5}
+                    theme_text_color: "Custom"
+                    text_color: blue
+                    on_release: 
+                        root.transition.direction = "right"
+                        root.current = "screen2"
+                
+                Label:
+                    markup: True
+                    text:'[b]ESTIMATING...[/b]'
+                    pos_hint: {"center_x": .5 if root.width > 500 else .4}
+                    color: grey
+                    font_size: "20dp"
+            MDLabel:
+                text: 'Estimated'
+                halign: "center"
+
+                                
+                    
+                   
