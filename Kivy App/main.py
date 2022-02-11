@@ -1,3 +1,5 @@
+from kivy.config import Config
+Config.set('graphics', 'KIVY_GL_BACKEND', 'angle_sdl2')
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.uix.textfield import MDTextField
