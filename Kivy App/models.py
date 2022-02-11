@@ -4,12 +4,23 @@ import pickle
 class Model:
     def __init__(self, directory="./Kivy App/models/"):
         self.iscsv = True
-        with open(directory + "model1b", "rb") as f:
-            self._model1 = pickle.load(f)
-        with open(directory + "model2c", "rb") as f:
-            self._model2 = pickle.load(f)
-        with open(directory + "model3b", "rb") as f:
-            self._model3 = pickle.load(f)
+        try:
+            with open(directory + "model1b", "rb") as f:
+                self._model1 = pickle.load(f)
+            with open(directory + "model2c", "rb") as f:
+                self._model2 = pickle.load(f)
+            with open(directory + "model3b", "rb") as f:
+                self._model3 = pickle.load(f)
+        except:
+            try:
+                with open(directory + "model1b", "rb") as f:
+                    self._model1 = pickle.load(f)
+                with open(directory + "model2c", "rb") as f:
+                    self._model2 = pickle.load(f)
+                with open(directory + "model3b", "rb") as f:
+                    self._model3 = pickle.load(f)
+            except:
+                pass
     
     def predict(self, X:pd.DataFrame, csv=True):
         X = self.preprocess(X)
