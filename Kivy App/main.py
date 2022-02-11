@@ -4,6 +4,8 @@ from kivymd.uix.textfield import MDTextField
 from plyer import filechooser
 import pandas as pd
 import numpy as np
+from threading import Thread
+from kivy.clock import Clock
 from models import Model
 
 class FeaturesInput(MDTextField):
@@ -30,6 +32,7 @@ class Manager(ScreenManager):
 
     _current_feature = 0
     _features = np.array([None for i in range(11)])
+    _model_done = False
     def load_NN(self):
         '''
         load the trained neural nework model.
@@ -39,7 +42,14 @@ class Manager(ScreenManager):
         '''
         load the statistical based model.
         '''
-        self._model = Model()
+        Thread(target=lambda *x: self._load('SM') ).start()
+
+    def _load(self, name):
+        if name == "SM":
+            self._model = Model()
+            self._model_done = True
+        else: 
+            pass
     
     def _next_feature(self, label, textinput):
         '''
@@ -63,7 +73,7 @@ class Manager(ScreenManager):
         if self._current_feature > 0:
             self._current_feature -= 1
             label.text = label.text.replace(f"{self._wine_features[self._current_feature+1]}", self._wine_features[self._current_feature])
-            textinput.text = ""
+            textinput.text = str(self._features[self._current_feature])
             textinput.hint_text = textinput.hint_text.replace(f'{12-self._current_feature-2}', f'{12-self._current_feature-1}')
 
     def _predict_features(self):
@@ -74,13 +84,26 @@ class Manager(ScreenManager):
         self.current = "screen3"
         df = self.createdFrame(self._wine_features, self._features)
         self._predictions = self._model.predict(df, csv=False)
+        self._report()
     
     def _predict_csv_features(self, dataframe):
         '''
         estimates the value of the wine with features extracted from a csv file.
         '''
         self._predictions = self._model.predict(dataframe)
-        print(self._predictions)
+        self._report()
+    
+    def _report(self):
+        '''
+        [size=20][b]ESTIMATIONS BY MODEL:60% ACCURATE[/b][/size]
+
+        [b]QUALITY IS:[/b]
+        {}
+        [b]Note:[/b] Although the accuracy gotten by the owners of the dataset is 61% (with the Support Vector Regressor against my Partially Stacked Support Vector Classifer) , I feel i can still push (train) the model beyound this limit (in time ofcourse).
+        '''
+        t = [f'||  {i+1} -> {j}  ||  ' for i, j in enumerate(self._predictions)]
+        fpred = ('\n'+' '*8).join([t[i]+t[i+1] for i in range(0, len(t)-1, 2)])
+        self.ids.report.text = self._report.__doc__.format(f"{fpred if len(fpred) > 20 else self._predictions[0]}")
     
     def _file_chooser(self):
         '''
@@ -92,20 +115,33 @@ class Manager(ScreenManager):
                 return
             self.transition.direction = "left"
             self.current = "screen3"
-            dataframe = pd.read_csv(self._csv_file)
-            if np.sum(self._wine_features == dataframe.columns) == len(self._wine_features):
-                self._predict_csv_features(dataframe)
-            else:
-                self._incorrect_csv()
+            Thread(target=lambda *x: self._get_data()).start()
         except IndexError as e:
             print("Caught: ", e)
         except:
             print("Akolo Unknown Error from filechooser!")
     
+    def _get_data(self):
+        '''
+        read csv into pandas data frame.
+        '''
+        dataframe = pd.read_csv(self._csv_file)
+        if np.sum(self._wine_features == dataframe.columns) == len(self._wine_features):
+            for _ in range(1000000):
+                if self._model_done:
+                    self._predict_csv_features(dataframe)
+                    break
+            else:
+                print("error: Model failed to load!")
+                MDApp.get_running_app().stop()
+        else:
+            self._incorrect_csv()
+    
     def _incorrect_csv(self):
         '''
         Triggered when an incorrect csv is passed.
         '''
+        self._report.__doc__.format("Invalid data in CSV file!")
 
     def createdFrame(self, col, val):
         return pd.DataFrame([val], columns=col)

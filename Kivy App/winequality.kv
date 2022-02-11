@@ -165,8 +165,10 @@ Manager:
                             input_filter: "float"
                             on_text_validate:
                                 finput.required = True if finput.text == "" else False
-                                finput.focus = True
                                 root._next_feature(label, finput)
+                                finput.focus = True
+                                displ.text = str(root._features)
+                        
                         MDRaisedButton:
                             markup: True
                             text: 'next'
@@ -178,6 +180,7 @@ Manager:
                                 finput.focus = True
                             on_release:
                                 root._next_feature(label, finput)
+                    
                     MDRaisedButton:
                         markup: True
                         text: 'or load all features from csv'
@@ -213,9 +216,18 @@ Manager:
                     pos_hint: {"center_x": .5 if root.width > 500 else .4}
                     color: grey
                     font_size: "20dp"
-            MDLabel:
-                text: ''
-                halign: "center"
+            ScrollView:
+                MDList:
+                    id: lbx
+                    padding: ('50dp', '100dp', '50dp', '50dp')
+                    size_hint_y:None
+                    MDLabel:
+                        markup: True
+                        id: report
+                        theme_text_color: "Custom"
+                        halign: "center"
+                        on_texture_size:
+                            lbx.height = dp(self.texture_size[1] + 20)
             
                     
 
