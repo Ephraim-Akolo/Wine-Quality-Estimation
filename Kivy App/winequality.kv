@@ -68,7 +68,7 @@ Manager:
                     on_release:
                         root.load_NN()
                         root.transition.direction = "left"
-                        root.current = "screen2"
+                        root.current = "screen4"
                         finput.focus = True
         Label:
             size_hint: None, None
@@ -162,7 +162,11 @@ Manager:
                             theme_text_color: "Custom"
                             color_mode: "custom"
                             line_color_focus: blue
-                            input_filter: "int"
+                            input_filter: "float"
+                            on_text_validate:
+                                finput.required = True if finput.text == "" else False
+                                finput.focus = True
+                                root._next_feature(label, finput)
                         MDRaisedButton:
                             markup: True
                             text: 'next'
@@ -205,13 +209,51 @@ Manager:
                 
                 Label:
                     markup: True
-                    text:'[b]ESTIMATING...[/b]'
+                    text:'[b]ESTIMATING[/b]'
                     pos_hint: {"center_x": .5 if root.width > 500 else .4}
                     color: grey
                     font_size: "20dp"
             MDLabel:
-                text: 'Estimated'
+                text: ''
                 halign: "center"
+            
+                    
+
+
+    Screen:
+        name: "screen4" 
+        BoxLayout:
+            orientation:'vertical'
+            RelativeLayout:
+                size_hint_y: .1
+                canvas.before:
+                    Color:
+                        rgba: transparent_blue
+                    Rectangle:
+                        size: self.size
+                MDIconButton:
+                    icon: "arrow-left-bold"
+                    pos_hint: {'center_y': .5}
+                    theme_text_color: "Custom"
+                    text_color: blue
+                    on_release: 
+                        root.transition.direction = "right"
+                        root.current = "screen1"
+                
+                Label:
+                    markup: True
+                    text:'[b]OOOPS[/b]'
+                    pos_hint: {"center_x": .5 if root.width > 500 else .4}
+                    color: grey
+                    font_size: "20dp"
+            MDLabel:
+                markup: True
+                text: '[b][color=#ff0000]Sorry, [/color][/b]\nthe [b]Artificial Nueral Network [/b]is under development... \nPlease use the Statistical model based on the [b]Support Vector Machines (Classifier)[/b]'
+                halign: "center"
+                font_size: "30dp"
+                size_hint_x: None
+                width: root.width - root.width/6
+                pos_hint: {"center_x": .5}
 
                                 
                     
