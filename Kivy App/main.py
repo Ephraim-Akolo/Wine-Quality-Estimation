@@ -4,6 +4,7 @@ from kivymd.uix.textfield import MDTextField
 from plyer import filechooser
 import pandas as pd
 import numpy as np
+from models import Model
 
 class FeaturesInput(MDTextField):
     '''
@@ -38,13 +39,14 @@ class Manager(ScreenManager):
         '''
         load the statistical based model.
         '''
+        self._model = Model()
     
     def _next_feature(self, label, textinput):
         '''
         goes to the next feature in the list.
         '''
         if textinput.required is False and self._current_feature < 11:
-            self._features[self._current_feature] = float(textinput.text)
+            self._features[self._current_feature] = np.float32(textinput.text)
             if self._current_feature < 10:
                 label.text = label.text.replace(f"{self._wine_features[self._current_feature]}", self._wine_features[self._current_feature+1])
             self._current_feature += 1
@@ -70,23 +72,26 @@ class Manager(ScreenManager):
         '''
         self.transition.direction = "left"
         self.current = "screen3"
-        self._features
+        df = self.createdFrame(self._wine_features, self._features)
+        self._predictions = self._model.predict(df, csv=False)
     
     def _predict_csv_features(self, dataframe):
         '''
         estimates the value of the wine with features extracted from a csv file.
         '''
-        _features = np.array([self._features])
-        print(_features)
+        self._predictions = self._model.predict(dataframe)
+        print(self._predictions)
     
     def _file_chooser(self):
         '''
         opens the platform filechooser to select csv file for prediction.
         '''
-        self.transition.direction = "left"
-        self.current = "screen3"
         try:
             self._csv_file = filechooser.open_file(title="choose csv file", multiple=False, preview=True, filters=["*.csv"])[0]
+            if len(self._csv_file) == 0:
+                return
+            self.transition.direction = "left"
+            self.current = "screen3"
             dataframe = pd.read_csv(self._csv_file)
             if np.sum(self._wine_features == dataframe.columns) == len(self._wine_features):
                 self._predict_csv_features(dataframe)
@@ -102,7 +107,8 @@ class Manager(ScreenManager):
         Triggered when an incorrect csv is passed.
         '''
 
-        
+    def createdFrame(self, col, val):
+        return pd.DataFrame([val], columns=col)
 
 
 class WineQualityApp(MDApp):
