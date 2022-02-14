@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import pickle
 class Model:
     def __init__(self, directory="./Kivy App/models/"):
@@ -11,7 +10,9 @@ class Model:
                 self._model2 = pickle.load(f)
             with open(directory + "model3b", "rb") as f:
                 self._model3 = pickle.load(f)
-        except:
+            print("Model Loaded successfully on first attempt!")
+        except (FileNotFoundError, FileExistsError) as e:
+            print(f"File failed to open: {e}... attempting again...")
             try:
                 with open(directory + "model1b", "rb") as f:
                     self._model1 = pickle.load(f)
@@ -19,8 +20,9 @@ class Model:
                     self._model2 = pickle.load(f)
                 with open(directory + "model3b", "rb") as f:
                     self._model3 = pickle.load(f)
-            except:
-                pass
+                print("Model Loaded successfully on second attempt!")
+            except (FileNotFoundError, FileExistsError) as f:
+                print(f"File failed to open: {f}...")
     
     def predict(self, X:pd.DataFrame, csv=True):
         X = self.preprocess(X)
@@ -42,7 +44,6 @@ class Model:
             return self._model2.predict(X1)
         else:
             return self._model3.predict(X2)
-        
         
 
     def preprocess(self, dataframe:pd.DataFrame):
