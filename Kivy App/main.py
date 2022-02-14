@@ -5,7 +5,6 @@ from plyer import filechooser
 import pandas as pd
 import numpy as np
 from threading import Thread
-from kivy.clock import Clock
 from models import Model
 
 class FeaturesInput(MDTextField):
@@ -31,7 +30,8 @@ class Manager(ScreenManager):
                 'alcohol'))
 
     _current_feature = 0
-    _features = np.array([None for i in range(11)])
+    _f = np.array([None for i in range(11)])
+    _features = _f.copy()
     _model_done = False
     def load_NN(self):
         '''
@@ -126,7 +126,7 @@ class Manager(ScreenManager):
         read csv into pandas data frame.
         '''
         dataframe = pd.read_csv(self._csv_file)
-        if np.sum(self._wine_features == dataframe.columns) == len(self._wine_features):
+        if np.sum(dataframe.columns not in self._wine_features) == 0:
             for _ in range(1000000):
                 if self._model_done:
                     self._predict_csv_features(dataframe)

@@ -6,6 +6,7 @@
 #:import Factory kivy.factory.Factory
 #:import about_features about_features
 <MyPopup@Popup>:
+    title: "About Features"
     BoxLayout:
         orientation:'vertical'
         ScrollView:
@@ -167,7 +168,7 @@ Manager:
                                 finput.required = True if finput.text == "" else False
                                 root._next_feature(label, finput)
                                 finput.focus = True
-                                displ.text = str(root._features)
+                                
                         
                         MDRaisedButton:
                             markup: True
@@ -209,6 +210,11 @@ Manager:
                     on_release: 
                         root.transition.direction = "right"
                         root.current = "screen2"
+                        root._current_feature = 0
+                        root._features = root._f.copy()
+                        finput.hint_text = "11 left"
+                        label.text = "Input wine's [color=#4169e1]{}[/color]".format(root._wine_features[root._current_feature])
+
                 
                 Label:
                     markup: True
