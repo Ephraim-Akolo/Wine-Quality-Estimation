@@ -48,5 +48,7 @@ This is where the machine learning model or algorithm is trained to be able to t
 The model/algorithm is trained in python.
 ### The Application development
 This is a software housing the model, with a user interface to enable easy interaction with the model.
+![software interface](https://raw.githubusercontent.com/jake-ephraim/Wine-Quality-Estimation/main/Kivy%20App/software1.PNG)
+![software interface](https://github.com/jake-ephraim/Wine-Quality-Estimation/blob/main/Kivy%20App/software2.PNG?)
 
 The application is developed in python.
